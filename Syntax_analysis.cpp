@@ -209,9 +209,28 @@ string Table(char Vn, char Vt)
 	return table[MapVn[Vn]][MapVt[Vt]];
 }
 
+void PrintAnalysisProcess(int num, stack<char> Sanalysis, stack<char>Sremain)
+{
+	cout << num << "\t";
+	string analysisStack = "", remainStack = "";
+	stack<char>Tanalysis = Sanalysis, Tremain = Sremain;
+	while (Tanalysis.size())
+	{
+		analysisStack = string(1, Tanalysis.top()) + analysisStack;
+		Tanalysis.pop();
+	}
+	while (Tremain.size())
+	{
+		remainStack += string(1, Tremain.top()) ;
+		Tremain.pop();
+	}
+	cout << analysisStack << "\t" << remainStack << "\t";
+}
 //总控程序
 void MasterConProgram(string sen)
 {
+	cout << "步骤" << "\t" << "分析栈" << "\t" << "余留符号串" << "\t" << "所用产生式" << endl;
+	int num = 1;
 	stack<char> Sanalysis, Sremain;
 	Sanalysis.push('#');
 	Sanalysis.push(IDsymbol);
@@ -224,6 +243,7 @@ void MasterConProgram(string sen)
 	bool Flag = true;
 	while (Flag)
 	{	
+		PrintAnalysisProcess(num++, Sanalysis, Sremain);
 		c = Sremain.top();
 		char Sym = Sanalysis.top();
 		Sanalysis.pop();
@@ -231,11 +251,12 @@ void MasterConProgram(string sen)
 		{
 			if (Sym == c)
 			{
+				cout << endl;
 				Sremain.pop();
 			}
 			else
 			{
-				cout << "ERROR!!!" << endl;
+				cout << "\nERROR!!!\n" ;
 				return;
 			}
 		}
@@ -245,19 +266,20 @@ void MasterConProgram(string sen)
 				Flag = false;
 			else
 			{
-				cout << "ERROR!!!" << endl;
+				cout << "\nERROR!!!\n" ;
 				return ;
 			}
 		}
 		else
 		{
 			string s = Table(Sym,c);
-			if (s[0] == Epsilon)	continue;
 			if (s == "")
 			{
-				cout << "ERROR!!!" << endl;
-				return ;
+				cout << "\nERROR!!!\n";
+				return;
 			}
+			cout << Sym<<"::=" << s << endl;
+			if (s[0] == Epsilon)	continue;
 			for (int i = s.length() - 1; i >= 0; i--)
 			{
 				Sanalysis.push(s[i]);
@@ -265,7 +287,7 @@ void MasterConProgram(string sen)
 		}
 		
 	}
-	cout << "SUCCESS!!!" << endl;
+	cout << "\nSUCCESS!!!\n" ;
 }
 
 //消除直接左递归
@@ -393,6 +415,7 @@ void PrintRules()
 		cout << Grammer << endl;
 	}
 }
+
 
 
 int main()

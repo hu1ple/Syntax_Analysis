@@ -24,6 +24,10 @@ void add(char a, char b)
 {
 	e[idx] = b, ne[idx] = h[a], h[a] = idx++;
 }
+void newFunction()
+{
+
+}
 
 //将输入的文法根据某个符号分割成多个字符串
 vector<string> split(string s, char c)
